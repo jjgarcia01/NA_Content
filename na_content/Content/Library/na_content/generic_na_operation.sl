@@ -1,6 +1,6 @@
 namespace: na_content
 operation:
-  name: matt_na
+  name: generic_na_operation
   inputs:
     - username
     - password:
