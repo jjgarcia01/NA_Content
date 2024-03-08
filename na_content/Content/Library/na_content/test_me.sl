@@ -23,15 +23,15 @@ flow:
 extensions:
   graph:
     steps:
-      matt_na:
-        x: 200
-        'y': 160
+      generic_na_operation:
+        x: 100
+        'y': 150
         navigate:
-          aa06b684-c755-3ad8-f413-f121b0df7b14:
-            targetId: cbd8841d-88f8-3f31-dc3e-52392dfd151c
+          a57814bc-b94d-1f7a-3347-c0ae312bb154:
+            targetId: 1bd6e65d-d475-616d-cf43-26beb0a2ae24
             port: SUCCESS
     results:
       SUCCESS:
-        cbd8841d-88f8-3f31-dc3e-52392dfd151c:
-          x: 440
-          'y': 160
+        1bd6e65d-d475-616d-cf43-26beb0a2ae24:
+          x: 400
+          'y': 150
