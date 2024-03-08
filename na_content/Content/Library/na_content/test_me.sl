@@ -5,11 +5,13 @@ flow:
     - matt_na:
         do:
           na_content.matt_na:
-            - username: jj.garcia
+            - username: "${get_sp('username')}"
             - password:
-                value: 'MFS0ftware#'
+                value: "${get_sp('password')}"
                 sensitive: true
             - target: adelaide
+            - api_url: "${get_sp('api_url')}"
+            - login_url: "${get_sp('login_url')}"
         publish:
           - naOutput
         navigate:
