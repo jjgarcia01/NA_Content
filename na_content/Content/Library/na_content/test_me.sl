@@ -2,9 +2,9 @@ namespace: na_content
 flow:
   name: test_me
   workflow:
-    - matt_na:
+    - generic_na_operation:
         do:
-          na_content.matt_na:
+          na_content.generic_na_operation:
             - username: "${get_sp('username')}"
             - password:
                 value: "${get_sp('password')}"
