@@ -2,7 +2,7 @@ namespace: na_content
 flow:
   name: execute_windows_healthcheck
   workflow:
-    - http_client_get:
+    - Get_csrf_token:
         do:
           io.cloudslang.base.http.http_client_get:
             - url: 'https://rpaoo.advantageinc.org:8443/oo/rest/version'
@@ -16,9 +16,9 @@ flow:
         publish:
           - csrf_token: "${cs_replace(cs_replace(cs_regex(response_headers,\"X-CSRF-TOKEN:.*\\n\"),\"X-CSRF-TOKEN: \",\"\"),\"\\n\",\"\")}"
         navigate:
-          - SUCCESS: http_client_post
+          - SUCCESS: Execute_OO_flow
           - FAILURE: on_failure
-    - http_client_post:
+    - Execute_OO_flow:
         do:
           io.cloudslang.base.http.http_client_post:
             - url: 'https://rpaoo.advantageinc.org:8443/oo/rest/v1/executions'
@@ -50,10 +50,10 @@ flow:
 extensions:
   graph:
     steps:
-      http_client_get:
+      Get_csrf_token:
         x: 40
         'y': 120
-      http_client_post:
+      Execute_OO_flow:
         x: 280
         'y': 120
         navigate:
@@ -63,5 +63,5 @@ extensions:
     results:
       SUCCESS:
         28016bd0-5d5d-a9e1-3642-479deac1fc76:
-          x: 680
+          x: 480
           'y': 120
