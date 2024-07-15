@@ -25,6 +25,8 @@ flow:
                     }}
         navigate:
           - SUCCESS: SUCCESS
+  outputs:
+    - flow_output_0
   results:
     - SUCCESS
 extensions:
