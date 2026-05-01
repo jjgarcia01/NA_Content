@@ -1,6 +1,6 @@
-namespace: na_content
+namespace: na_content.Example
 flow:
-  name: list_devices
+  name: list_devices_example
   inputs:
     - target: adelaide
   workflow:

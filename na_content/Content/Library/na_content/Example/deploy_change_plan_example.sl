@@ -1,6 +1,6 @@
-namespace: na_content
+namespace: na_content.Example
 flow:
-  name: deploy_change_plan
+  name: deploy_change_plan_example
   inputs:
     - ip
     - scriptname
