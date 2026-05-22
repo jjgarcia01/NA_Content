@@ -1,10 +1,10 @@
-namespace: Digital_twin.subflows
+namespace: Integrations.EveNG.Operations
 operation:
-  name: create_lab_py
+  name: create_lab
   inputs:
-    - username: "${get_sp('eve_admin_user_NG')}"
-    - password: "${get_sp('eve_admin_password_NG')}"
-    - eveng_network_ip: "${get_sp('eveng_network_ip_NG')}"
+    - username
+    - password
+    - eveng_network_ip
     - test_lab
   python_action:
     use_jython: false

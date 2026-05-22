@@ -1,18 +1,31 @@
 namespace: My_stuff.subflows
 flow:
-  name: NNM_command
+  name: add_to_nnmi
   inputs:
-    - cmd: "${'/opt/OV/bin/nnmloadseeds.ovpl -n '+ipAddress+' -t NAF_topology'}"
-    - passwd: "${get_sp('NNM_admin_passwd')}"
+    - labRecord:
+        prompt:
+          type: text
+    - passwd
   workflow:
+    - set_ipAddress:
+        do:
+          io.cloudslang.base.utils.sleep:
+            - seconds: '0'
+            - labRecord: '${labRecord}'
+        publish:
+          - ipAddress: "${cs_regex(labRecord,'^(?:[^,]+,){2}\\s*([^,]+)')}"
+        navigate:
+          - SUCCESS: ssh_command
+          - FAILURE: on_failure
     - ssh_command:
         do:
           io.cloudslang.base.ssh.ssh_command:
-            - host: nnmi.cloudmylab.com
-            - command: "${'echo \"'+passwd+'\" | sudo -S '+cmd}"
-            - username: "${get_sp('NNM_admin_user')}"
+            - host: "${get_sp('NNM_host')}"
+            - command: "${'echo \"'+passwd+'\"| sudo -S /opt/OV/bin/nnmloadseeds.ovpl -n '+ipAddress}"
+            - pty: 'true'
+            - username: "${get_sp('nnm_username')}"
             - password:
-                value: "${get_sp('NNM_admin_passwd')}"
+                value: '${passwd}'
                 sensitive: true
             - timeout: '5000'
             - use_shell: 'true'
@@ -32,12 +45,15 @@ extensions:
   graph:
     steps:
       ssh_command:
-        x: 200
+        x: 240
         'y': 200
         navigate:
           353fe6d7-a68e-76b8-1fbe-c092801a337f:
             targetId: 6c476990-fac2-dae5-ece5-ffb1d413c1c0
             port: SUCCESS
+      set_ipAddress:
+        x: 80
+        'y': 200
     results:
       SUCCESS:
         6c476990-fac2-dae5-ece5-ffb1d413c1c0:

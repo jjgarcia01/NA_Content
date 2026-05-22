@@ -1,16 +1,19 @@
-namespace: Digital_twin.subflows
+namespace: My_stuff.subflows
 flow:
-  name: NNM_command
+  name: add_to_nnm
   inputs:
-    - cmd
+    - cmd: "/opt/OV/bin/nnmloadseeds.ovpl -n '+cs_regex(labRecord,'^(?:[^,]+,){2}\\s*([^,]+)')+' -t NAF_topology"
     - passwd: "${get_sp('NNM_admin_passwd')}"
+    - labRecord:
+        prompt:
+          type: text
   workflow:
     - ssh_command:
         do:
           io.cloudslang.base.ssh.ssh_command:
-            - host: nnmi.cloudmylab.com
-            - command: "${'echo \"'+passwd+'\" | sudo -S '+cmd}"
-            - username: "${get_sp('NNM_admin_user')}"
+            - host: "${get_sp('NNM_host')}"
+            - command: '${cmd}'
+            - username: "${get_sp('nnm_username')}"
             - password:
                 value: "${get_sp('NNM_admin_passwd')}"
                 sensitive: true

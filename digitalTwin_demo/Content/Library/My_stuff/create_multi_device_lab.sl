@@ -1,6 +1,6 @@
 namespace: My_stuff
 flow:
-  name: delete_me
+  name: create_multi_device_lab
   inputs:
     - filePath:
         prompt:
@@ -29,24 +29,6 @@ flow:
           - labPath
         navigate:
           - SUCCESS: iterateList
-    - iterateList:
-        do:
-          io.cloudslang.base.lists.list_iterator:
-            - list: '${csv}'
-            - separator: "\\n"
-        publish:
-          - recordList: '${result_string}'
-        navigate:
-          - HAS_MORE: createNode
-          - NO_MORE: start_lab
-          - FAILURE: on_failure
-    - Add_to_NNM:
-        do:
-          My_stuff.subflows.NNM_command:
-            - cmd: "${'/opt/OV/bin/nnmloadseeds.ovpl -n '+ipAddress+' -t NAF_topology'}"
-        navigate:
-          - FAILURE: on_failure
-          - SUCCESS: iterateList
     - start_lab:
         do:
           Integrations.EveNG.Operations.start_lab:
@@ -56,23 +38,48 @@ flow:
             - labPath: '${labPath}'
         navigate:
           - SUCCESS: SUCCESS
-    - createNode:
+    - iterateList:
         do:
-          Integrations.EveNG.Operations.createNode:
-            - recordList: '${recordList}'
-            - labPath: '${labPath}'
-            - eveng_network_ip: "${get_sp('eveng_network_ip')}"
+          io.cloudslang.base.lists.list_iterator:
+            - list: '${csv}'
+            - separator: "\\n"
+        publish:
+          - labRecord: '${result_string}'
+        navigate:
+          - HAS_MORE: create_node
+          - NO_MORE: start_lab
+          - FAILURE: on_failure
+    - create_node:
+        do:
+          Integrations.EveNG.Operations.create_node:
             - username: "${get_sp('eve_admin_user')}"
             - password: "${get_sp('eve_admin_password')}"
+            - eveng_network_ip: "${get_sp('eveng_network_ip')}"
+            - labPath: '${labPath}'
+            - labRecord: '${labRecord}'
+        navigate:
+          - SUCCESS: add_to_nnm
+    - add_to_nnm:
+        do:
+          My_stuff.subflows.add_to_nnm: []
         navigate:
           - FAILURE: on_failure
-          - SUCCESS: Add_to_NNM
+          - SUCCESS: iterateList
   results:
     - FAILURE
     - SUCCESS
 extensions:
   graph:
     steps:
+      getCSVfile:
+        x: 40
+        'y': 80
+      create_lab:
+        x: 200
+        'y': 80
+      create_node:
+        x: 320
+        'y': 280
       start_lab:
         x: 520
         'y': 80
@@ -80,20 +87,11 @@ extensions:
           895974e3-7a15-fbf6-1b7f-bc37148a8574:
             targetId: b12939f8-f16b-047b-bef9-1ef9c35ece89
             port: SUCCESS
-      create_lab:
-        x: 200
-        'y': 80
-      getCSVfile:
-        x: 40
-        'y': 80
       iterateList:
-        x: 360
+        x: 320
         'y': 80
-      Add_to_NNM:
-        x: 520
-        'y': 280
-      createNode:
-        x: 360
+      add_to_nnm:
+        x: 480
         'y': 280
     results:
       SUCCESS:
