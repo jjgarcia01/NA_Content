@@ -5,4 +5,4 @@ properties:
   - username: jj.garcia
   - password:
       value: 'MFS0ftware#'
-      sensitive: true
+      sensitive: false

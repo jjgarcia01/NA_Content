@@ -2,9 +2,9 @@ namespace: Integrations.EveNG.Operations
 operation:
   name: create_lab
   inputs:
-    - username
-    - password
-    - eveng_network_ip
+    - username: "${get_sp('eve_admin_user')}"
+    - password: "${get_sp('eve_admin_password')}"
+    - eveng_network_ip: "${get_sp('eveng_network_ip')}"
     - test_lab
   python_action:
     use_jython: false

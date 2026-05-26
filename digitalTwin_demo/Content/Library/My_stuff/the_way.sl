@@ -6,7 +6,7 @@
 ########################################################################################################################
 namespace: My_stuff
 flow:
-  name: rock_me
+  name: the_way
   inputs:
     - test_lab:
         prompt:
@@ -18,9 +18,6 @@ flow:
     - create_lab:
         do:
           Integrations.EveNG.Operations.create_lab:
-            - username: "${get_sp('eve_admin_user')}"
-            - password: "${get_sp('eveng_network_ip')}"
-            - eveng_network_ip: "${get_sp('eveng_network_ip')}"
             - test_lab: '${test_lab}'
         publish:
           - labPath
@@ -29,18 +26,12 @@ flow:
     - start_lab:
         do:
           Integrations.EveNG.Operations.start_lab:
-            - username: "${get_sp('eve_admin_user')}"
-            - password: "${get_sp('eve_admin_password')}"
-            - eveng_network_ip: "${get_sp('eveng_network_ip')}"
             - labPath: '${labPath}'
         navigate:
           - SUCCESS: SUCCESS
     - create_node:
         do:
           Integrations.EveNG.Operations.create_node:
-            - username: "${get_sp('eve_admin_user')}"
-            - password: "${get_sp('eve_admin_password')}"
-            - eveng_network_ip: "${get_sp('eveng_network_ip')}"
             - labPath: '${labPath}'
             - labRecord: '${labRecord}'
         navigate:

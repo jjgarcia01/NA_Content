@@ -2,21 +2,10 @@ namespace: My_stuff.subflows
 flow:
   name: add_to_nnmi
   inputs:
-    - labRecord:
-        prompt:
-          type: text
+    - labRecord
     - passwd
+    - ipAddress: "${cs_regex(labRecord,'^(?:[^,]+,){2}\\s*([^,]+)')}"
   workflow:
-    - set_ipAddress:
-        do:
-          io.cloudslang.base.utils.sleep:
-            - seconds: '0'
-            - labRecord: '${labRecord}'
-        publish:
-          - ipAddress: "${cs_regex(labRecord,'^(?:[^,]+,){2}\\s*([^,]+)')}"
-        navigate:
-          - SUCCESS: ssh_command
-          - FAILURE: on_failure
     - ssh_command:
         do:
           io.cloudslang.base.ssh.ssh_command:
@@ -51,9 +40,6 @@ extensions:
           353fe6d7-a68e-76b8-1fbe-c092801a337f:
             targetId: 6c476990-fac2-dae5-ece5-ffb1d413c1c0
             port: SUCCESS
-      set_ipAddress:
-        x: 80
-        'y': 200
     results:
       SUCCESS:
         6c476990-fac2-dae5-ece5-ffb1d413c1c0:

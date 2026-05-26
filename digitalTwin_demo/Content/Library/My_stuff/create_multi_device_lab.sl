@@ -21,9 +21,6 @@ flow:
     - create_lab:
         do:
           Integrations.EveNG.Operations.create_lab:
-            - username: "${get_sp('eve_admin_user')}"
-            - password: "${get_sp('eve_admin_password')}"
-            - eveng_network_ip: "${get_sp('eveng_network_ip')}"
             - test_lab: '${labName}'
         publish:
           - labPath
@@ -32,9 +29,6 @@ flow:
     - start_lab:
         do:
           Integrations.EveNG.Operations.start_lab:
-            - username: "${get_sp('eve_admin_user')}"
-            - password: "${get_sp('eve_admin_password')}"
-            - eveng_network_ip: "${get_sp('eveng_network_ip')}"
             - labPath: '${labPath}'
         navigate:
           - SUCCESS: SUCCESS
@@ -52,16 +46,15 @@ flow:
     - create_node:
         do:
           Integrations.EveNG.Operations.create_node:
-            - username: "${get_sp('eve_admin_user')}"
-            - password: "${get_sp('eve_admin_password')}"
-            - eveng_network_ip: "${get_sp('eveng_network_ip')}"
             - labPath: '${labPath}'
             - labRecord: '${labRecord}'
         navigate:
-          - SUCCESS: add_to_nnm
-    - add_to_nnm:
+          - SUCCESS: add_to_nnmi
+    - add_to_nnmi:
         do:
-          My_stuff.subflows.add_to_nnm: []
+          My_stuff.subflows.add_to_nnmi:
+            - labRecord: '${labRecord}'
+            - passwd: "${get_sp('NNM_admin_passwd')}"
         navigate:
           - FAILURE: on_failure
           - SUCCESS: iterateList
@@ -77,9 +70,6 @@ extensions:
       create_lab:
         x: 200
         'y': 80
-      create_node:
-        x: 320
-        'y': 280
       start_lab:
         x: 520
         'y': 80
@@ -88,9 +78,12 @@ extensions:
             targetId: b12939f8-f16b-047b-bef9-1ef9c35ece89
             port: SUCCESS
       iterateList:
-        x: 320
+        x: 360
         'y': 80
-      add_to_nnm:
+      create_node:
+        x: 240
+        'y': 280
+      add_to_nnmi:
         x: 480
         'y': 280
     results:
